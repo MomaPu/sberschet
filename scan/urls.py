@@ -1,9 +1,14 @@
+from django.contrib import admin
 from django.urls import path
-from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+from .views import hotel_image_view, success
 
 urlpatterns = [
-    path('livefe/', views.livefe, name='livefe'),
-    path('capture_photo/', views.capture_photo, name='capture_photo'),
-    path('find_camera_index/', views.find_camera_index, name='find_camera_index'), #Добавляем
-    path('start_camera/', views.start_camera, name='start_camera'), #Добавляем
+    path('image_upload', hotel_image_view, name='image_upload'),
+    path('success', success, name='success'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

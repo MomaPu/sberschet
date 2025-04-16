@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Hotel_image</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
     <form method = "post" enctype="multipart/form-data">
         {% csrf_token %}
+        Ссесия пользователя: 
+        {{ user.first_name }}
+        {{ user.last_name }}
         {{ form.as_p }}
         <button type="submit">Upload</button>
     </form>
@@ -15,5 +14,4 @@
         <h3>Загруженное изображение:</h3>
         <img src="" alt="Uploaded Image">
     {% endif %}
-</body>
-</html>
+{% endblock %}

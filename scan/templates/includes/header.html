@@ -8,7 +8,7 @@
         <!-- Если пользователь авторизован -->
         <div class="dropdown">
           <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false"><a class="text-decoration-none text-reset"
-            href="{% url 'scan:profile' %}">Профиль</a></button>
+            href="{% url 'scan:profile' user.id %}">Профиль</a></button>
           <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false"><a class="text-decoration-none text-reset"
             href="{% url 'logout' %}">Выйти</a></button>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">

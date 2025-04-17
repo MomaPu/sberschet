@@ -1,5 +1,5 @@
 from django import forms
-from .models import Hotel, User
+from .models import Hotel, User, Session
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 
@@ -40,3 +40,21 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = "__all__"
+
+class LocalcheckForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = "__all__"
+
+class SessionForm(forms.ModelForm):
+
+    class Meta:
+        model = Session
+        fields = ('users_id',)
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email')

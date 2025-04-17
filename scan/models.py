@@ -6,9 +6,9 @@ User = get_user_model()
 
 # models.py
 class Hotel(models.Model):
-	User
-	name = models.ForeignKey(User, on_delete=models.CASCADE)
-	hotel_Main_Img = models.ImageField(upload_to='images/')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=255)
+    hotel_Main_Img = models.ImageField(upload_to='images/')
 
 
 class Bill(models.Model):

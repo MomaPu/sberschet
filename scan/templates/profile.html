@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+{% if user.is_authenticated%}
+
+Ваш никнейм: {{ user.get_username }}
+<li>    {{ user.first_name }}   </li>
+<li>    {{ user.last_name }}    </li>
+<li>    {{ user.email }}    </li>
+
+{% else %}
+У вас нет аккаунта
+{% endif %}
+{% endblock %}

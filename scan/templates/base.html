@@ -14,63 +14,31 @@
     </title>
     {% bootstrap_css %}
   </head>
-<body style="background-color: #E0FFFF; font-family: 'Arial', sans-serif; color: #333;">
+<body style="background-color: #f2f5f7; font-family: 'Arial', sans-serif; color: #333;">
+  {% include "includes/header.html" %}
   <!-- Верхняя навигационная панель -->
-  <nav class="navbar navbar-expand-lg" style="background-color: #008000; padding: 10px 20px;">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-      <a class="navbar-brand text-white" href="#">Мой СберПрофиль</a>
-
-      {% if user.is_authenticated %}
-        <!-- Если пользователь авторизован -->
-        <div class="dropdown">
-          <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ user.username }}
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <li><a class="dropdown-item" href="#">Мой профиль</a></li>
-            <li><a class="dropdown-item" href="#">Друзья</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Выйти</a></li>
-          </ul>
-        </div>
-      {% else %}
-        <!-- Для гостя: кнопки входа и регистрации -->
-        <div>
-          <a class="btn btn-light me-2" href="#">Войти</a>
-          <a class="btn btn-outline-light" href="#">Регистрация</a>
-        </div>
-      {% endif %}
-    </div>
-  </nav>
 
   <!-- Основной контент -->
   <main>
     <div class="container py-5">
 
       {% if user.is_authenticated %}
-        <!-- Если пользователь авторизован: показываем только друзей -->
-        <h4>Ваши друзья</h4>
-        <div class="list-group mb-4">
-          {% for friend in friends %}
-            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
-              <img src="" alt="Аватар" class="rounded-circle me-3" width="50" height="50">
-              <div>{{ friend.get_full_name|default:friend.username }}</div>
-            </a>
-          {% empty %}
-            <p class="text-muted">У вас пока нет друзей.</p>
-          {% endfor %}
-        </div>
       {% else %}
         <!-- Для гостей – приглашение войти/зарегистрироваться -->
-        <div class="text-center">
-          <h2>Добро пожаловать в личный кабинет</h2>
-          <p>Пожалуйста, войдите или зарегистрируйтесь, чтобы воспользоваться всеми функциями.</p>
-          <a href="#" class="btn btn-primary btn-lg me-2">Войти</a>
-          <a href="#" class="btn btn-outline-primary btn-lg">Зарегистрироваться</a>
-        </div>
       {% endif %}
           {% block content %}
           {% endblock %}
     </div>
+    <style>
+      .btn-custom {
+        background-color: #4d9e46 !important;
+        border-color: #4d9e46 !important;
+        color: white !important;
+      }
+      .btn-custom:hover {
+        background-color: #3e8e37 !important;
+        border-color: #3e8e37 !important;
+      }
+    </style>
   </main>
 </body>

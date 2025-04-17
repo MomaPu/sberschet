@@ -27,3 +27,16 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ['username']
+
+
+class HomepageForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = "__all__"
+
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = "__all__"

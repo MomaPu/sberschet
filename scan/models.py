@@ -9,3 +9,17 @@ class Hotel(models.Model):
 	User
 	name = models.ForeignKey(User, on_delete=models.CASCADE)
 	hotel_Main_Img = models.ImageField(upload_to='images/')
+
+
+class Bill(models.Model):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_bills')
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    description = models.TextField(blank=True, null=True)
+
+class BillParticipant(models.Model):
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, related_name='participants')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    share_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    paid = models.BooleanField(default=False)
+    payment_link = models.URLField(blank=True, null=True)

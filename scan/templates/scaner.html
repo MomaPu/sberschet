@@ -1,17 +1,20 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
-{% block content %}
-    <form method = "post" enctype="multipart/form-data">
-        {% csrf_token %}
-        Ссесия пользователя: 
-        {{ user.first_name }}
-        {{ user.last_name }}
-        {{ form.as_p }}
-        <button type="submit">Upload</button>
-    </form>
 
+{% block content %}
+    <!-- Ваша форма -->
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success mt-3">Загрузить</button>
+    </form>
+      <form method="POST" enctype="multipart/form-data" class="mt-3">
+        {% csrf_token %}
+        <input type="file" id="profileImageUpload" name="profile_picture" accept="image/*" style="display: none;" onchange="this.form.submit()">
+      </form>
+    </div>
     {% if uploaded_image_base64 %}
-        <h3>Загруженное изображение:</h3>
-        <img src="" alt="Uploaded Image">
+        <h3 class="mt-4">Загруженное изображение:</h3>
+        <img src="{{ uploaded_image_base64 }}" alt="Uploaded Image" class="img-thumbnail" style="max-width: 100%; height: auto;">
     {% endif %}
 {% endblock %}

@@ -7,7 +7,7 @@ from .views import hotel_image_view, success
 app_name = "scan"
 
 urlpatterns = [
-    path('', hotel_image_view, name='image_upload'),
+    path('scan', hotel_image_view, name='image_upload'),
     path('success', success, name='success'),
 ]
 

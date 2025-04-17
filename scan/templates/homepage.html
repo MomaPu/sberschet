@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+    {% if user.is_authenticated %}
+      <form>
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success mt-3" style="background-color: #4d9e46"><a href="{% url 'scan:image_upload' %}" class="list-group-item list-group-item-action d-flex align-items-center">Создать сессию</a></button>
+        <!-- Если пользователь авторизован: показываем только друзей -->
+        {% for friend in friends %}
+          <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+            <img src="" alt="Аватар" class="rounded-circle me-3" width="50" height="50">
+            <div>{{ friend.get_full_name|default:friend.username }}</div>
+          </a>
+        {% empty %}
+          <p class="text-muted">У вас пока нет друзей.</p>
+        {% endfor %}
+      </form>
+    {% else %}
+      <div class="text-center">
+        <h2>Добро пожаловать в личный кабинет</h2>
+        <p>Пожалуйста, войдите или зарегистрируйтесь, чтобы воспользоваться всеми функциями.</p>
+        <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-2">Войти</a>
+        <a href="{% url 'registration' %}" class="btn btn-outline-primary btn-lg">Зарегистрироваться</a>
+      </div>
+    {% endif %}
+{% endblock %}

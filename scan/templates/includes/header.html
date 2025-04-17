@@ -1,11 +1,26 @@
 {% load static %}
 <header>
-  <nav class="navbar navbar-light" style="background-color: lightskyblue">
-    <div class="container">
-      <a class="navbar-brand" href="{% url 'scan:image_upload' %}">
-        <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
-        Деление счета
-      </a>
+  <nav class="navbar navbar-expand-lg" style="background-color: #4ba35b; padding: 10px 20px;">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <a class="navbar-brand text-white" href="{% url 'scan:homepage' %}">Мой СберПрофиль</a>
+
+      {% if user.is_authenticated %}
+        <!-- Если пользователь авторизован -->
+        <div class="dropdown">
+          <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false"><a class="text-decoration-none text-reset"
+            href="{% url 'scan:profile' %}">Профиль</a></button>
+          <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false"><a class="text-decoration-none text-reset"
+            href="{% url 'logout' %}">Выйти</a></button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="#">Мой профиль</a></li>
+            <li><a class="dropdown-item" href="#">Друзья</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li></li>
+          </ul>
+        </div>
+      {% else %}
+        <!-- Для гостя: кнопки входа и регистрации -->
+      {% endif %}
     </div>
   </nav>
 </header>

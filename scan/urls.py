@@ -2,13 +2,15 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import hotel_image_view, success
+from .views import hotel_image_view, success, homepage, profile
 
 app_name = "scan"
 
 urlpatterns = [
-    path('scan', hotel_image_view, name='image_upload'),
+    path('', homepage, name='homepage'),
+    path('scaner/', hotel_image_view, name='image_upload'),
     path('success', success, name='success'),
+    path('profile/', profile, name="profile")
 ]
 
 if settings.DEBUG:

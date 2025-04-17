@@ -2,6 +2,12 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
+{% if ocr_result %}
+  <div class="ocr-result">
+      <h3>Результат обработки:</h3>
+      <p>{{ ocr_result }}</p>
+  </div>
+{% endif %}
     <!-- Ваша форма -->
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}

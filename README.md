@@ -112,4 +112,4 @@ sber-bill-splitter/
 
 Обратная связь
 Почта капитана y4ne242@gmail.com
-Ссылка на Git: https://github.com/MomaPu/camera.git
+Ссылка на Git: https://github.com/MomaPu/sberschet.git

@@ -1,25 +1,20 @@
 from django import forms
-from .models import Hotel, User, Session
+from .models import Scaner, User, Session
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model
 
 
-User = get_user_model()
-
-
-class HotelForm(forms.ModelForm):
+class ScanerForm(forms.ModelForm):
 
     class Meta:
-        model = Hotel
-        fields = ['hotel_Main_Img']
+        model = Scaner
+        fields = ['scaner_img']
 
 
 class UserForm(forms.ModelForm):
-    
+
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name']
-
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -35,17 +30,20 @@ class HomepageForm(forms.ModelForm):
         model = User
         fields = "__all__"
 
+
 class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
         fields = "__all__"
 
+
 class LocalcheckForm(forms.ModelForm):
 
     class Meta:
         model = User
         fields = "__all__"
+
 
 class SessionForm(forms.ModelForm):
 

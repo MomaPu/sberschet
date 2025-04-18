@@ -26,13 +26,20 @@
                         <div class="error-message">{{ form.email.errors|striptags }}</div>
                     {% endif %}
                 </div>
-
             </div>
-
             <button type="submit" class="save-button">
                 <i class="fas fa-save"></i> Сохранить изменения
             </button>
-        </form>
+        </form>  
+        <ul>
+            <br>
+            {% for session in sessions %}
+                Сессия №{{ session.id }}
+                <a href="{% url 'scan:image_upload' session.id %}" class="btn btn-success">Перейти к сессии</a>
+                <br>
+                <br>
+            {% endfor %}
+        </ul> 
     </div>
 <style>
     body {

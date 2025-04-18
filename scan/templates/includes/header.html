@@ -1,8 +1,10 @@
 {% load static %}
 <header>
-  <nav class="navbar navbar-expand-lg" style="background-color: #4ba35b; padding: 10px 20px;">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-      <a class="navbar-brand text-white" href="{% url 'scan:homepage' %}">Мой СберПрофиль</a>
+  <nav class="navbar navbar-expand-lg" style="background-color: #4ba35b; padding: 10px 20px; position: relative;">
+      <a class="navbar-brand d-flex align-items-center text-white" href="{% url 'scan:homepage' %}">
+        <img src="{% static 'images/sber_logo.png' %}" alt="Сбербанк" style="height: 30px;">
+        Мой СберПрофиль
+      </a>
 
       {% if user.is_authenticated %}
         <!-- Если пользователь авторизован -->
@@ -23,6 +25,25 @@
       {% else %}
         <!-- Для гостя: кнопки входа и регистрации -->
       {% endif %}
+
     </div>
   </nav>
+    <div class="sber-kot-wrapper">
+        <img src="{% static 'images/sber_kot.png' %}" alt="СберКот" class="sber-kot-img">
+    </div>
 </header>
+<style>
+    .sber-kot-wrapper {
+      position: absolute; /* или fixed, если хотите, чтобы всегда было видимо */
+      top: 8%; /* по вертикали центровать */
+      right: 0px; /* отступ справа */
+      transform: translateX(-110%); /* поднимаем на половину высоты для вертикального выравнивания */
+      z-index: -1; /* чтобы было выше других элементов */
+    }
+
+    .sber-kot-img {
+      height: 760px; /* или другой размер */
+      display: block; /* чтобы не было отступов */
+    }
+
+</style>

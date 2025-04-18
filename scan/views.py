@@ -1,30 +1,49 @@
 from django.http import HttpResponse
-from .models import Hotel, User, Session
+from .models import Session, User
 from django.contrib.auth.decorators import login_required
-from .forms import HotelForm, HomepageForm, ProfileForm, LocalcheckForm, UserUpdateForm, SessionForm
+from .forms import (
+    ScanerForm,
+    HomepageForm,
+    LocalcheckForm,
+    UserUpdateForm,
+    SessionForm,
+)
 from PIL import Image
 from django.http import Http404
 from apple_ocr.ocr import OCR
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 
 
-KEYWORDS = ['сумма', 'итог', 'загальна', 'всего', 'total', 'sum', 'amount', 'due', 'balance', 'итого к оплате:', 'к оплате']
+KEYWORDS = [
+    'сумма',
+    'итог',
+    'загальна',
+    'всего',
+    'total',
+    'sum',
+    'amount',
+    'due',
+    'balance',
+    'итого к оплате:',
+    'к оплате'
+]
 
-def hotel_image_view(request, pk):
-    context={}
+
+def scanning_and_dividing(request, pk):
+    context = {}
     session = Session.objects.get(pk=pk)
     try:
         session = Session.objects.get(pk=pk)
         count_users = session.users_id.count()
         context['count_users'] = count_users
         if request.method == 'POST':
-            form = HotelForm(request.POST, request.FILES)
+            form = ScanerForm(request.POST, request.FILES)
             if form.is_valid():
-                hotel_instance = form.save(commit=False)
-                hotel_instance.user = request.user
-                hotel_instance.session_id = session
+                scaner_instance = form.save(commit=False)
+                scaner_instance.user = request.user
+                scaner_instance.session_id = session
 
-                image_file = request.FILES['hotel_Main_Img']
+                image_file = request.FILES['scaner_img']
                 img = Image.open(image_file)
 
                 ocr_instance = OCR(image=img)
@@ -66,13 +85,13 @@ def hotel_image_view(request, pk):
                 price = price / count_users
                 context['ocr_result'] = int(price)
 
-                hotel_instance.hotel_Main_Img = image_file
-                hotel_instance.save()
+                scaner_instance.scaner_img = image_file
+                scaner_instance.save()
 
                 context['form'] = form
                 return render(request, 'scaner.html', context)
         else:
-            form = HotelForm()
+            form = ScanerForm()
 
         context['form'] = form
         context['session'] = session
@@ -81,21 +100,28 @@ def hotel_image_view(request, pk):
     except Session.DoesNotExist:
         raise Http404("Сессия не найдена")
 
+
 def success(request):
-    return HttpResponse('successfully uploaded')
+    if request == 200:
+        return HttpResponse('successfully uploaded')
+
 
 def homepage(request):
     form = HomepageForm(request.POST, request.FILES)
     return render(request, 'homepage.html', {'form': form})
 
+
 def local_check(request):
     form = LocalcheckForm(request.POST, request.FILES)
     return render(request, 'localcheck.html', {'form': form})
 
+
 @login_required
 def profile(request):
+    sessions = Session.objects.filter(author=request.user)
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
+
         if form.is_valid():
             form.save()
             return redirect('scan:profile')
@@ -104,8 +130,10 @@ def profile(request):
 
     context = {
         'form': form,
+        'sessions': sessions
     }
     return render(request, 'profile.html', context)
+
 
 @login_required
 def session(request):
@@ -118,10 +146,13 @@ def session(request):
             session.save()
             form.save_m2m()
             print("Session сохранена:", session.id)
-            return redirect('scan:image_upload', pk=session.id  )
+            return redirect('scan:image_upload', pk=session.id)
         else:
             print("Ошибки формы:", form.errors)
     else:
         form = SessionForm()
-    return render(request, "session.html", {'form': form, 'user_sessions':user_sessions.distinct})
-
+    return render(
+        request,
+        "session.html",
+        {'form': form, 'user_sessions': user_sessions.distinct}
+    )

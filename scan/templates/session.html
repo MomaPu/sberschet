@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 {% block content %}
-{{ user.username }}
 {% csrf_token %}
+{{ user.username }}
 {{ form.as_p }}
-
+<form method="post" action="{% url 'scan:session' %}">
+    {% csrf_token %}
+    <button type="submit" class="save-button">
+        <i class="fas fa-save"></i> Сохранить изменения
+    </button>
+</form>
 {% endblock %}
+
+

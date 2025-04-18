@@ -9,6 +9,7 @@ from apple_ocr.ocr import OCR
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
+
 KEYWORDS = ['сумма', 'итог', 'загальна', 'всего', 'total', 'sum', 'amount', 'due', 'balance', 'итого к оплате:', 'к оплате']
 
 def hotel_image_view(request):
@@ -109,12 +110,17 @@ def profile(request, pk):
 def session(request):
     form = SessionForm(request.POST)
     if request.POST:
+        print(form)
         if form.is_valid():
             session = form.save()
             session.author = request.user
             session.save()
             form.save_m2m()
+            return redirect('scan:session')
+        else:
+            form = SessionForm()
     context = {
         'form': form
     }
     return render(request, "session.html", context)
+

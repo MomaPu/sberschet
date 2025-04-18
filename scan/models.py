@@ -32,4 +32,3 @@ class LocalCheck(models.Model):
 class Session(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_author")
     users_id = models.ManyToManyField(User, related_name="users_id")
-    price = models.CharField(max_length=10000000)

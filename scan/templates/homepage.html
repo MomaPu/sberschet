@@ -2,30 +2,73 @@
 {% load django_bootstrap5 %}
 {% block content %}
     {% if user.is_authenticated %}
-    <div class="teams_form">
-      <div class="test">
-        <form>
-          {% csrf_token %}
-          <button type="submit" class="btn btn-success mt-3" style="background-color: #4d9e46"><a href="{% url 'scan:image_upload' %}" class="list-group-item list-group-item-action d-flex align-items-center">Создать сессию</a></button>
-          <button type="submit" class="btn btn-success mt-3" style="background-color: #4d9e46"><a href="{% url 'scan:local_check' %}" class="list-group-item list-group-item-action d-flex align-items-center">Личный высчет чека</a></button>
-          <!-- Если пользователь авторизован: показываем только друзей -->
-          {% for friend in friends %}
-            <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
-              <img src="" alt="Аватар" class="rounded-circle me-3" width="50" height="50">
-              <div>{{ friend.get_full_name|default:friend.username }}</div>
-            </a>
-          {% empty %}
-            <p class="text-muted">У вас пока нет друзей.</p>
-          {% endfor %}
-        </form>
-      </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm p-4 bg-white rounded">
+                    <div class="text-center mb-4">
+                        <h4>Деление счета</h4>
+                    </div>
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'scan:session' %}" class="btn btn-success btn-lg py-3" style="background-color: #4d9e46; color: white;">
+                            Создать сессию
+                        </a>
+                        <a href="{% url 'scan:local_check' %}" class="btn btn-success btn-lg py-3" style="background-color: #4d9e46; color: white;">
+                            Личный высчет чека
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     {% else %}
-      <div class="text-center">
-        <h2>Добро пожаловать в личный кабинет</h2>
-        <p>Пожалуйста, войдите или зарегистрируйтесь, чтобы воспользоваться всеми функциями.</p>
-        <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-2">Войти</a>
-        <a href="{% url 'registration' %}" class="btn btn-outline-primary btn-lg">Зарегистрироваться</a>
-      </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <div class="card shadow-sm p-5 bg-white rounded">
+                    <h2 class="mb-4">Добро пожаловать в личный кабинет</h2>
+                    <p class="mb-4">Пожалуйста, войдите или зарегистрируйтесь, чтобы воспользоваться всеми функциями.</p>
+                    <div class="d-grid gap-2 d-md-block">
+                        <a href="{% url 'login' %}" class="btn btn-custom btn-lg me-2">Войти</a>
+                        <a href="{% url 'registration' %}" class="btn btn-custom-outline btn-lg">Зарегистрироваться</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endif %}
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+    .btn-success {
+        width: 100%;
+    }
+    .bg-light {
+        background-color: #f8f9fa!important;
+    }
+    /* Стили для кастомных кнопок */
+    .btn-custom {
+        background-color: white !important;
+        color: #4d9e46 !important;
+        border: 2px solid #4d9e46 !important;
+    }
+    .btn-custom-outline {
+        background-color: white !important;
+        color: #4d9e46 !important;
+        border: 2px solid #4d9e46 !important;
+    }
+    .btn-custom:hover,
+    .btn-custom:active,
+    .btn-custom:focus,
+    .btn-custom-outline:hover,
+    .btn-custom-outline:active,
+    .btn-custom-outline:focus {
+        background-color: #4d9e46 !important;
+        color: white !important;
+        border-color: #4d9e46 !important;
+    }
+</style>
 {% endblock %}

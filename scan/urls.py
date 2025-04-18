@@ -9,9 +9,9 @@ app_name = "scan"
 
 urlpatterns = [
     path('', homepage, name='homepage'),
-    path('scaner/', hotel_image_view, name='image_upload'),
+    path('scaner/<pk>', hotel_image_view, name='image_upload'),
     path('success', success, name='success'),
-    path('profile/<pk>/', profile, name="profile"),
+    path('profile/', profile, name="profile"),
     path('localcheck/', local_check, name="local_check"),
     path('session/', session, name="session"),
     path('logout/', LogoutView.as_view(next_page='homepage'), name='logout')

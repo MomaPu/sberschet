@@ -2,25 +2,84 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-{% if ocr_result %}
-  <div class="ocr-result">
-      <h3>Результат обработки:</h3>
-      <p>{{ ocr_result }}</p>
-  </div>
-{% endif %}
-    <!-- Ваша форма -->
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success mt-3">Загрузить</button>
-    </form>
-      <form method="POST" enctype="multipart/form-data" class="mt-3">
-        {% csrf_token %}
-        <input type="file" id="profileImageUpload" name="profile_picture" accept="image/*" style="display: none;" onchange="this.form.submit()">
-      </form>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-success shadow">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-receipt me-2"></i>Сканирование чека для сессии
+                    </h3>
+                </div>
+                
+                <div class="card-body">
+                    <div class="alert alert-success">
+                        <h4 class="alert-heading">
+                            <i class="fas fa-users me-2"></i>Количество участников: 
+                            <span class="badge bg-white text-success fs-4">{{ count_users }}</span>
+                        </h4>
+                    </div>
+
+                    {% if ocr_result %}
+                    <div class="ocr-result mb-4 p-4 bg-light-success rounded">
+                        <h3 class="text-success mb-3">
+                            <i class="fas fa-check-circle me-2"></i>Результат обработки:
+                        </h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-white rounded shadow-sm mb-3">
+                                    <h4 class="text-muted mb-2">Общая сумма:</h4>
+                                    <h2 class="text-success">{{ ocr_base_result }} руб.</h2>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-white rounded shadow-sm mb-3">
+                                    <h4 class="text-muted mb-2">Сумма на человека:</h4>
+                                    <h2 class="text-success">{{ ocr_result }} руб.</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data" class="mt-4">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            {% bootstrap_form form %}
+                        </div>
+                        <button type="submit" class="btn btn-success btn-lg w-100 py-3">
+                            <i class="fas fa-upload me-2"></i>Загрузить чек
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    {% if uploaded_image_base64 %}
-        <h3 class="mt-4">Загруженное изображение:</h3>
-        <img src="{{ uploaded_image_base64 }}" alt="Uploaded Image" class="img-thumbnail" style="max-width: 100%; height: auto;">
-    {% endif %}
+</div>
+
+<style>
+    .card {
+        border-radius: 12px;
+        border-width: 2px;
+    }
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+    }
+    .bg-light-success {
+        background-color: #e8f5e9;
+    }
+    .btn-success {
+        background-color: #4caf50;
+        border-color: #4caf50;
+        transition: all 0.3s ease;
+    }
+    .btn-success:hover {
+        background-color: #388e3c;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .badge.bg-white {
+        border: 1px solid #4caf50;
+    }
+</style>
 {% endblock %}

@@ -1,5 +1,200 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
-{% block content %}
 
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0"><i class="fas fa-calculator me-2"></i>Личный расчет чека</h3>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Шаг 1: Ввод количества подач -->
+                    <div id="step1">
+                        <h4 class="mb-4">Введите количество съеденных подач:</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group mb-3">
+                                    <input type="number" id="portions-input" class="form-control" 
+                                           min="1" value="1" required>
+                                    <button id="next-btn" class="btn btn-success" type="button">
+                                        Далее <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Шаг 2: Форма ввода данных о блюдах -->
+                    <div id="step2" class="d-none">
+                        <h4 class="mb-4">Введите данные о подачах:</h4>
+                        <form id="dishes-form">
+                            <div id="dishes-container">
+                                <!-- Сюда будут добавляться поля -->
+                            </div>
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-success me-2">
+                                    <i class="fas fa-calculator me-2"></i>Рассчитать
+                                </button>
+                                <button id="back-btn" type="button" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Назад
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Шаг 3: Результаты расчета -->
+                    <div id="step3" class="d-none">
+                        <h4 class="mb-4">Результаты расчета:</h4>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th>Подача</th>
+                                        <th>Название</th>
+                                        <th>Цена</th>
+                                        <th>Количество</th>
+                                        <th>Сумма</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="results-body">
+                                    <!-- Сюда будут добавлены результаты -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="alert alert-success mt-4">
+                            <h5 class="mb-0">Общая сумма: <span id="total-sum">0</span> руб.</h5>
+                        </div>
+                        <button id="new-calculation" class="btn btn-success mt-3">
+                            <i class="fas fa-redo me-2"></i>Новый расчет
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dish-card {
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #f8f9fa;
+    }
+    .dish-card h5 {
+        color: #28a745;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const portionsInput = document.getElementById('portions-input');
+    const nextBtn = document.getElementById('next-btn');
+    const backBtn = document.getElementById('back-btn');
+    const dishesContainer = document.getElementById('dishes-container');
+    const dishesForm = document.getElementById('dishes-form');
+    const resultsBody = document.getElementById('results-body');
+    const totalSum = document.getElementById('total-sum');
+    const newCalculationBtn = document.getElementById('new-calculation');
+
+    // Переход к шагу 2
+    nextBtn.addEventListener('click', function() {
+        const portions = parseInt(portionsInput.value);
+        if (portions < 1) return;
+        
+        // Генерируем поля для каждой подачи
+        dishesContainer.innerHTML = '';
+        for (let i = 0; i < portions; i++) {
+            dishesContainer.innerHTML += `
+                <div class="dish-card mb-3">
+                    <h5>Подача ${i + 1}</h5>
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label">Название блюда (необязательно)</label>
+                            <input type="text" class="form-control dish-name" data-id="${i}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Цена за блюдо (руб)*</label>
+                            <input type="number" class="form-control dish-price" data-id="${i}" 
+                                   min="0" step="0.01" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Количество (необязательно)</label>
+                            <input type="number" class="form-control dish-quantity" data-id="${i}" 
+                                   min="1" value="1">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        step1.classList.add('d-none');
+        step2.classList.remove('d-none');
+    });
+
+    // Возврат к шагу 1
+    backBtn.addEventListener('click', function() {
+        step2.classList.add('d-none');
+        step1.classList.remove('d-none');
+    });
+
+    // Расчет результатов
+    dishesForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const dishes = [];
+        const dishNames = document.querySelectorAll('.dish-name');
+        const dishPrices = document.querySelectorAll('.dish-price');
+        const dishQuantities = document.querySelectorAll('.dish-quantity');
+        
+        let total = 0;
+        resultsBody.innerHTML = '';
+        
+        for (let i = 0; i < dishPrices.length; i++) {
+            const name = dishNames[i].value || `Подача ${i + 1}`;
+            const price = parseFloat(dishPrices[i].value) || 0;
+            const quantity = parseInt(dishQuantities[i].value) || 1;
+            const sum = price * quantity;
+            
+            dishes.push({
+                name,
+                price,
+                quantity,
+                sum
+            });
+            
+            total += sum;
+            
+            // Добавляем строку в таблицу результатов
+            resultsBody.innerHTML += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${name}</td>
+                    <td>${price.toFixed(2)} руб</td>
+                    <td>${quantity}</td>
+                    <td>${sum.toFixed(2)} руб</td>
+                </tr>
+            `;
+        }
+        
+        totalSum.textContent = total.toFixed(2);
+        step2.classList.add('d-none');
+        step3.classList.remove('d-none');
+    });
+
+    // Новый расчет
+    newCalculationBtn.addEventListener('click', function() {
+        step3.classList.add('d-none');
+        step1.classList.remove('d-none');
+        portionsInput.value = '1';
+    });
+});
+</script>
 {% endblock %}

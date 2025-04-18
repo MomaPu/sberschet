@@ -52,6 +52,9 @@ class SessionForm(forms.ModelForm):
     class Meta:
         model = Session
         fields = ('users_id',)
+        widgets = {
+            'members': forms.SelectMultiple(attrs={'class': 'form-control'}),
+        }
 
 
 class UserUpdateForm(forms.ModelForm):

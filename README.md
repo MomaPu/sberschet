@@ -19,6 +19,7 @@
 ### Backend:
 - Python
 - Django
+- Sqlite
 
 ### OCR и обработка изображений:
 - `apple_ocr` *(использует Apple Vision)*

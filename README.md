@@ -47,7 +47,6 @@
 1. Клонируйте репозиторий:
    ```bash
    git clone https://github.com/your-username/sber-bill-splitter.git
-   cd sber-bill-splitter
    ```
 2. Создайте виртуальное окружение:
    ```bash
